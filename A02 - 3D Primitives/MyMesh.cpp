@@ -121,7 +121,7 @@ void MyMesh::Render(matrix4 a_mProjection, matrix4 a_mView, matrix4 a_mModel)
 {
 	// Use the buffer and shader
 	GLuint nShader = m_pShaderMngr->GetShaderID("Basic");
-	glUseProgram(nShader); 
+	glUseProgram(nShader);
 
 	//Bind the VAO of this object
 	glBindVertexArray(m_VAO);
@@ -133,11 +133,11 @@ void MyMesh::Render(matrix4 a_mProjection, matrix4 a_mView, matrix4 a_mModel)
 	//Final Projection of the Camera
 	matrix4 m4MVP = a_mProjection * a_mView * a_mModel;
 	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(m4MVP));
-	
+
 	//Solid
 	glUniform3f(wire, -1.0f, -1.0f, -1.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glDrawArrays(GL_TRIANGLES, 0, m_uVertexCount);  
+	glDrawArrays(GL_TRIANGLES, 0, m_uVertexCount);
 
 	//Wire
 	glUniform3f(wire, 1.0f, 0.0f, 1.0f);
@@ -186,15 +186,15 @@ void MyMesh::GenerateCube(float a_fSize, vector3 a_v3Color)
 	//|  |
 	//0--1
 
-	vector3 point0(-fValue,-fValue, fValue); //0
-	vector3 point1( fValue,-fValue, fValue); //1
-	vector3 point2( fValue, fValue, fValue); //2
+	vector3 point0(-fValue, -fValue, fValue); //0
+	vector3 point1(fValue, -fValue, fValue); //1
+	vector3 point2(fValue, fValue, fValue); //2
 	vector3 point3(-fValue, fValue, fValue); //3
 
-	vector3 point4(-fValue,-fValue,-fValue); //4
-	vector3 point5( fValue,-fValue,-fValue); //5
-	vector3 point6( fValue, fValue,-fValue); //6
-	vector3 point7(-fValue, fValue,-fValue); //7
+	vector3 point4(-fValue, -fValue, -fValue); //4
+	vector3 point5(fValue, -fValue, -fValue); //5
+	vector3 point6(fValue, fValue, -fValue); //6
+	vector3 point7(-fValue, fValue, -fValue); //7
 
 	//F
 	AddQuad(point0, point1, point3, point2);
@@ -218,6 +218,27 @@ void MyMesh::GenerateCube(float a_fSize, vector3 a_v3Color)
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
 }
+/*
+	// Generate Circle code
+	vector3 centerPoint = glm::vec3(0.0f, 0.0f, 0.0f); // set center point of the circle
+	vector3 botLeftPt = glm::vec3(0.0f, 0.0f, 0.0f);
+	vector3 botRightPt = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	float triSection = 2 * PI / a_nSubdivisions; // calculate theta
+
+	for (int i = 0; i < a_nSubdivisions + 1; i++){
+		float angle = triSection * i; // calculate angle
+		float xPoint = centerPoint.x + a_fRadius * cosf(angle); // generate xPoint for triangle
+		float yPoint = centerPoint.y + a_fRadius * sinf(angle); // generate yPoint for triangle
+
+		botRightPt = glm::vec3(xPoint, yPoint, 0.0f); // creating bottom right triangle point
+
+		AddTri(botLeftPt, botRightPt, centerPoint); // left right center
+
+		// botLeftPt = glm::vec3(botRightPt.x, botRightPt.y, botRightPt.z); // setting bottom left triangle point to bottom right triangle point
+		botLeftPt = botRightPt;
+	}
+*/
 void MyMesh::GenerateCuboid(vector3 a_v3Dimensions, vector3 a_v3Color)
 {
 	Release();
@@ -276,8 +297,35 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	// GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+
+	vector3 centerPoint = glm::vec3(0.0f); // set center point of the circle
+	vector3 topCenterPoint = glm::vec3(0.0f, 0.0f, a_fHeight); // set center of upper circle
+	vector3 botLeftPt = glm::vec3(0.0f);
+	vector3 botRightPt = glm::vec3(0.0f);
+
+	float triSection = 2 * PI / a_nSubdivisions; // calculate theta
+	float angle = 0.0f;
+	float xPoint = 0.0f;
+	float yPoint = 0.0f;
+
+	// probably need to draw the inverse of this
+	// draws base
+	for (int i = 0; i <= a_nSubdivisions; i++) {
+		angle = triSection * i; // calculate angle
+		xPoint = centerPoint.x + a_fRadius * cosf(angle); // generate xPoint for triangle
+		yPoint = centerPoint.y + a_fRadius * sinf(angle); // generate yPoint for triangle
+
+		botRightPt = glm::vec3(xPoint, yPoint, 0.0f); // creating bottom right triangle point
+
+		if (i != 0) {
+			AddTri(botRightPt, botLeftPt, centerPoint); // right left center
+			AddTri(botLeftPt, botRightPt, topCenterPoint); // left right center
+		}
+
+		botLeftPt = botRightPt;
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -300,8 +348,38 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	// GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+
+	vector3 centerPoint = glm::vec3(0.0f); // set center point of the circle
+	vector3 topCenterPoint = glm::vec3(0.0f, 0.0f, a_fHeight); // set center of upper circle
+	vector3 botLeftPt = glm::vec3(0.0f);
+	vector3 botRightPt = glm::vec3(0.0f);
+	vector3 topLeftPt = glm::vec3(0.0f);
+	vector3 topRightPt = glm::vec3(0.0f);
+
+	float triSection = 2 * PI / a_nSubdivisions; // calculate theta
+	float angle = 0.0f;
+	float xPoint = 0.0f;
+	float yPoint = 0.0f;
+
+	for (int i = 0; i <= a_nSubdivisions; i++) {
+		angle = triSection * i; // calculate angle
+		xPoint = centerPoint.x + a_fRadius * cosf(angle); // generate xPoint for triangle
+		yPoint = centerPoint.y + a_fRadius * sinf(angle); // generate yPoint for triangle
+
+		botRightPt = glm::vec3(xPoint, yPoint, 0.0f); // creating bottom right triangle point
+		topRightPt = glm::vec3(xPoint, yPoint, a_fHeight);
+
+		if (i != 0) {
+			AddTri(botRightPt, botLeftPt, centerPoint); // left right center
+			AddTri(topLeftPt, topRightPt, topCenterPoint); // left right, center
+			AddQuad(botLeftPt, botRightPt, topLeftPt, topRightPt); // botLeft, botRight, topLeft, topRight
+		}
+
+		botLeftPt = botRightPt;
+		topLeftPt = topRightPt;
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -330,8 +408,57 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	// GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
 	// -------------------------------
+
+	vector3 centerPoint = glm::vec3(0.0f); // set center point of the circle
+	vector3 topCenterPoint = glm::vec3(0.0f, 0.0f, a_fHeight); // set center of upper circle
+	vector3 botLeftPt = glm::vec3(0.0f);
+	vector3 botRightPt = glm::vec3(0.0f);
+	vector3 topLeftPt = glm::vec3(0.0f);
+	vector3 topRightPt = glm::vec3(0.0f);
+	vector3 botInnerLeft = glm::vec3(0.0f);
+	vector3 botInnerRight = glm::vec3(0.0f);
+	vector3 topInnerLeft = glm::vec3(0.0f);
+	vector3 topInnerRight = glm::vec3(0.0f);
+
+	float triSection = 2 * PI / a_nSubdivisions; // calculate theta
+	float angle = 0.0f;
+	float xOuterPoint = 0.0f;
+	float yOuterPoint = 0.0f;
+	float xInnerPoint = 0.0f;
+	float yInnerPoint = 0.0f;
+
+	for (int i = 0; i <= a_nSubdivisions; i++) {
+		angle = triSection * i; // calculate angle
+		xOuterPoint = centerPoint.x + a_fOuterRadius * cosf(angle); // generate xPoint for triangle
+		yOuterPoint = centerPoint.y + a_fOuterRadius * sinf(angle); // generate yPoint for triangle
+
+		botRightPt = glm::vec3(xOuterPoint, yOuterPoint, 0.0f); // creating bottom right triangle point
+		topRightPt = glm::vec3(xOuterPoint, yOuterPoint, a_fHeight);
+
+		if (i != 0) {
+			AddQuad(botLeftPt, botRightPt, topLeftPt, topRightPt); // this works draws outer quads
+		}
+
+		xInnerPoint = centerPoint.x + a_fInnerRadius * cosf(angle); // generate xPoint for triangle
+		yInnerPoint = centerPoint.y + a_fInnerRadius * sinf(angle); // generate yPoint for triangle
+
+		botInnerRight = glm::vec3(xInnerPoint, yInnerPoint, 0.0f); // creating bottom right triangle point
+		topInnerRight = glm::vec3(xInnerPoint, yInnerPoint, a_fHeight);
+
+		if (i != 0) {
+			AddQuad(botInnerRight, botInnerLeft, topInnerRight, topInnerLeft); // this works draws inner quads
+			AddQuad(topLeftPt, topRightPt, topInnerLeft, topInnerRight); // top draw
+			AddQuad(botRightPt, botLeftPt, botInnerRight, botInnerLeft); // bottom draw
+		}
+
+		// point transfer code stuff
+		botLeftPt = botRightPt;
+		topLeftPt = topRightPt;
+		botInnerLeft = botInnerRight;
+		topInnerLeft = topInnerRight;
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -365,10 +492,16 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
 	// -------------------------------
 
+	// inner is the radius of the tube
+	// b is the subdivisions of the tube
+
+	// save start points into a vector
 	// Adding information about color
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
 }
+
+//http://www.songho.ca/opengl/gl_sphere.html followed along to this for help 
 void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Color)
 {
 	if (a_fRadius < 0.01f)
@@ -386,10 +519,63 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
-	// -------------------------------
+	// variable declarations
+	float x; // x value for coordinate
+	float y; // y value for coordinate
+	float z; // z value for coordinate
+	float xy; // xy value for coordinate that changes in the second for loop
+	float countVal = a_nSubdivisions * 3; // increases the amount of subdivisions to make it look smoother/nicer
+	float sectorStep = 2 * PI / countVal; // latitude
+	float stackStep = PI / countVal; // longitude
+	float sectorAngle = 0.0f; // angle for the latitude
+	float stackAngle = 0.0f; // angle for longitude
+	int k1 = 0; // placeholder value for point variable
+	int k2 = 0; // placeholder value for point variable
+	std::vector<vector3> points; // vector of points in the sphere
+	std::vector<int> indices; // vector of int values that pertain to adjoining points in a row on the sphere
 
+	// looping through increased subdivisions
+	for (int i = 0; i <= countVal; i++) 
+	{
+		stackAngle = PI / 2 - i * stackStep; // calculating angle for longitude
+		xy = a_fRadius * cosf(stackAngle); // calculates the base xy value that then gets split into seperate x & y values in the next loop
+		z = a_fRadius * sinf(stackAngle); // calculates the z value for the points
+
+		// looping through increased subdivisions
+		for (int j = 0; j <= countVal; j++, k1++, k2++) 
+		{
+			sectorAngle = j * sectorStep; // calculating angle for latitude
+			x = xy * cosf(sectorAngle); // calculating x value for point
+			y = xy * sinf(sectorAngle); // calculating y value for point
+			points.push_back(vector3(x, y, z)); // adding a tri to the points vector
+		}
+	}
+
+	// loops through increased subdivisions
+	for (int i = 0; i < countVal; i++) 
+	{
+		k1 = i * (countVal + 1); // setting initial value for points variable
+		k2 = k1 + countVal + 1; // setting initial value for points variable
+
+		// loops through increased subdivisions
+		for (int j = 0; j < countVal; j++) 
+		{
+			// top and bottom of sphere
+			if (i != 0) 
+			{
+				AddTri(points[k1], points[k2], points[k1 + 1]); // adding a triangle to a the render list
+			}
+
+			// innards of the sphere
+			if (i != (countVal - 1)) 
+			{
+				AddTri(points[k1 + 1], points[k2], points[k2 + 1]); // adding a triangle to a the render list
+			}
+
+			k1++; // incrementing a points variable
+			k2++; // incrementing othe points variable
+		}
+	}
 	// Adding information about color
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
