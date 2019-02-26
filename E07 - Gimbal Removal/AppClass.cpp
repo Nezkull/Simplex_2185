@@ -35,8 +35,6 @@ void Application::Display(void)
 	glm::quat quat2 = glm::angleAxis(glm::radians(m_v3Rotation.y), AXIS_Y);
 	glm::quat quat3 = glm::angleAxis(glm::radians(m_v3Rotation.z), AXIS_Z);
 
-	
-
 	m_qOrientation = m_qOrientation * (quat1*quat2*quat3);
 	m_pMesh->Render(m4Projection, m4View, ToMatrix4(m_qOrientation));
 	

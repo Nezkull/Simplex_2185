@@ -438,6 +438,7 @@ void Application::ProcessKeyboard(void)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
 		m_v3Rotation = vector3(0.0f);
+		m_qOrientation = vector3(0.0f);
 	}
 }
 //Joystick
