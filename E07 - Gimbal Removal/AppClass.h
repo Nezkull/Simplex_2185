@@ -14,6 +14,9 @@ Date: 2017/05
 
 class Application
 {
+	float m_fFov = 90.0f; // added for demo
+	vector3 m_v3Eye = vector3(0.0f, 0.0f, 10.0f); // added for the demo/homework
+
 	matrix4 m_m4Model = IDENTITY_M4;
 	quaternion m_qOrientation;
 	vector3 m_v3Rotation;
