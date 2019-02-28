@@ -1,5 +1,8 @@
 #include "AppClass.h"
 using namespace Simplex;
+
+// look at the gimbal lock and there was a demo somewhere that covered mouse clicking and calculating angle/ changing rotations from mouse input
+
 //Mouse
 void Application::ProcessMouseMovement(sf::Event a_event)
 {
