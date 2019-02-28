@@ -387,9 +387,17 @@ void Application::ProcessKeyboard(void)
 		fSpeed *= 5.0f;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		m_pCamera->MoveForward(fSpeed);
+		m_pCamera->MoveForward(-fSpeed); // swapped signs
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_pCamera->MoveForward(-fSpeed);
+		m_pCamera->MoveForward(fSpeed); // swapped signs
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		m_pCamera->MoveSideways(-fSpeed); // swapped signs
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		m_pCamera->MoveSideways(fSpeed); // swapped signs
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+		m_pCamera->MoveVertical(-fSpeed);
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+		m_pCamera->MoveVertical(fSpeed);
 #pragma endregion
 }
 //Joystick
