@@ -174,3 +174,33 @@ void MyCamera::MoveSideways(float a_fDistance)
 	m_v3Target += m_v3Rightward * -a_fDistance;
 	m_v3Above += m_v3Rightward * -a_fDistance;
 }
+
+vector3 Simplex::MyCamera::GetForward()
+{
+	return m_v3Forward;
+}
+
+vector3 Simplex::MyCamera::GetUpwards()
+{
+	return m_v3Upward;
+}
+
+vector3 Simplex::MyCamera::GetSides()
+{
+	return m_v3Rightward;
+}
+
+void Simplex::MyCamera::SetForward(vector3 forward)
+{
+	m_v3Forward = forward;
+}
+
+void Simplex::MyCamera::SetUpwards(vector3 upward)
+{
+	m_v3Upward = upward;
+}
+
+void Simplex::MyCamera::SetSides(vector3 sides)
+{
+	m_v3Rightward = sides;
+}

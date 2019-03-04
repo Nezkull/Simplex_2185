@@ -234,6 +234,18 @@ public:
 	OUTPUT: ---
 	*/
 	void MoveSideways(float a_fDistance = 0.1f);
+
+	vector3 GetForward();
+
+	vector3 GetUpwards();
+
+	vector3 GetSides();
+
+	void SetForward(vector3 forward);
+
+	void SetUpwards(vector3 upward);
+
+	void SetSides(vector3 sides);
 };
 
 } //namespace Simplex
