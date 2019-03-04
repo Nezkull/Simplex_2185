@@ -370,27 +370,26 @@ void Application::CameraRotation(float a_fSpeed)
 	{
 		fDeltaMouse = static_cast<float>(MouseY - CenterY);
 		fAngleX += fDeltaMouse * a_fSpeed;
-
-		// do rotational stuff and things
-		// quaternion rotKillMe = glm::quat(vector3(this needs a thing here), more stuff here, 0.0f);
-		
-		// m_pCamera = kill me, this is literally full of shit.
-		// m_qArcBall = quaternion(vector3(0.0f, glm::radians(a_fSensitivity * DeltaMouse), 0.0f)) * m_qArcBall;
-		// m_pCamera = quaternion(vector3(0.0f, glm::radians(fAngleX), 0.0f)) * m_qArcBall;
 	}
 
-	// quaternion rot1 = vector3()
+	if (MouseY >= 89) {
+		MouseY = 89;
+	}
+	if ((MouseX >= 89)) {
+		MouseX = 89;
+	}
 
 	quaternion rot1 = glm::angleAxis(glm::radians(fAngleX), AXIS_X);
 	quaternion rot2 = glm::angleAxis(glm::radians(fAngleY), AXIS_Y);
 
+	// rotation vectors
 	vector3 rotView = m_pCamera->GetForward() * rot1 * rot2;
 	vector3 rotR = m_pCamera->GetSides() * rot2;
 
 	m_pCamera->SetForward(rotView);
 	m_pCamera->SetSides(rotR);
 
-	vector3 targ = m_pCamera->GetForward() + m_pCamera->GetSides();
+	vector3 targ = m_pCamera->GetForward() + m_pCamera->GetPosition();
 
 	m_pCamera->SetTarget(targ);
 
