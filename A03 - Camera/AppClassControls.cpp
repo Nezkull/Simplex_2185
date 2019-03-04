@@ -372,6 +372,7 @@ void Application::CameraRotation(float a_fSpeed)
 		fAngleX += fDeltaMouse * a_fSpeed;
 	}
 
+	// fixing gimbal lock better then NASA did (probably)
 	if (MouseY >= 89) {
 		MouseY = 89;
 	}
@@ -379,6 +380,7 @@ void Application::CameraRotation(float a_fSpeed)
 		MouseX = 89;
 	}
 
+	// calculating new rotations
 	quaternion rot1 = glm::angleAxis(glm::radians(fAngleX), AXIS_X);
 	quaternion rot2 = glm::angleAxis(glm::radians(fAngleY), AXIS_Y);
 
@@ -389,6 +391,7 @@ void Application::CameraRotation(float a_fSpeed)
 	m_pCamera->SetForward(rotView);
 	m_pCamera->SetSides(rotR);
 
+	// calculating the new target
 	vector3 targ = m_pCamera->GetForward() + m_pCamera->GetPosition();
 
 	m_pCamera->SetTarget(targ);
