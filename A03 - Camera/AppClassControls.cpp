@@ -370,6 +370,13 @@ void Application::CameraRotation(float a_fSpeed)
 	{
 		fDeltaMouse = static_cast<float>(MouseY - CenterY);
 		fAngleX += fDeltaMouse * a_fSpeed;
+
+		// do rotational stuff and things
+		// quaternion rotKillMe = glm::quat(vector3(this needs a thing here), more stuff here, 0.0f);
+
+		// m_pCamera = kill me, this is literally full of shit.
+		// m_qArcBall = quaternion(vector3(0.0f, glm::radians(a_fSensitivity * DeltaMouse), 0.0f)) * m_qArcBall;
+		// m_pCamera = quaternion(vector3(0.0f, glm::radians(fAngleX), 0.0f)) * m_qArcBall;
 	}
 	//Change the Yaw and the Pitch of the camera
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
@@ -389,6 +396,7 @@ void Application::ProcessKeyboard(void)
 	if (fMultiplier)
 		fSpeed *= 5.0f;
 
+	// added in more keyboard input checks and called the appropriate functions for moving in the correct directions
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		m_pCamera->MoveForward(-fSpeed); // swapped signs
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))

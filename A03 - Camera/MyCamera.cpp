@@ -120,6 +120,7 @@ void Simplex::MyCamera::ResetCamera(void)
 
 void Simplex::MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3 a_v3Target, vector3 a_v3Upward)
 {
+	// do some stuff here for the target thingy to look at the right thingamajig
 	m_v3Position = a_v3Position;
 	m_v3Target = a_v3Target;
 
