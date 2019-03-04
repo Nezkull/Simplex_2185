@@ -53,22 +53,24 @@ void Application::Display(void)
 		m_pCamera->ResetCamera();
 		break;
 	case 2:
-		m_pCamera->ResetCamera();
+		// m_pCamera->ResetCamera();
+
 		break;
 	case 3:
-		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(20.0f, 0.0f, 0.0f), vector3(0.0f), vector3(-AXIS_Z)); // works
 		break;
 	case 4:
-		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, -17.0f), vector3(0.0f), vector3(AXIS_Y)); // works
 		break;
 	case 5:
-		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, -10.0f), vector3(0.0f), vector3(AXIS_Y)); // 
+		m_pCamera->SetFOV
 		break;
 	case 6:
 		m_pCamera->ResetCamera();
 		break;
 	case 7:
-		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, 10.0f), vector3(0.0f), vector3(-AXIS_Y)); // works
 		break;
 	}
 
