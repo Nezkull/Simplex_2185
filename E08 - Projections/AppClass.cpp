@@ -53,8 +53,10 @@ void Application::Display(void)
 		m_pCamera->ResetCamera();
 		break;
 	case 2:
-		// m_pCamera->ResetCamera();
-
+		// m_pCamera->SetFOV(50.0f);
+		m_pCamera
+		m_pCamera->SetNearFar(vector2(-10.0f, 1.0f));
+		// do something else here
 		break;
 	case 3:
 		m_pCamera->SetPositionTargetAndUpward(vector3(20.0f, 0.0f, 0.0f), vector3(0.0f), vector3(-AXIS_Z)); // works
@@ -63,11 +65,12 @@ void Application::Display(void)
 		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, -17.0f), vector3(0.0f), vector3(AXIS_Y)); // works
 		break;
 	case 5:
-		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, -10.0f), vector3(0.0f), vector3(AXIS_Y)); // 
-		m_pCamera->SetFOV
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, -17.0f), vector3(0.0f), vector3(AXIS_Y)); // works
+		m_pCamera->SetNearFar(vector2(10.0f, -17.0f)); // works
 		break;
 	case 6:
-		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, -15.0f), vector3(0.0f), vector3(AXIS_Y)); // works
+		m_pCamera->SetNearFar(vector2(0.01f, 10.0f)); // works
 		break;
 	case 7:
 		m_pCamera->SetPositionTargetAndUpward(vector3(0.0f, 0.0f, 10.0f), vector3(0.0f), vector3(-AXIS_Y)); // works

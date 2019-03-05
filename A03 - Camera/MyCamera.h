@@ -18,7 +18,7 @@ class MyCamera
 
 	vector3 m_v3Forward = vector3(0.0f, 0.0f, -1.0f);
 	vector3 m_v3Rightward = vector3(-1.0f, 0.0f, 0.0f);
-	vector3 m_v3Upward = vector3(0.0f, -1.0f, 0.0f);
+	vector3 m_v3Upward = vector3(0.0f, 1.0f, 0.0f);
 
 	bool m_bPerspective = true; //perspective view? False is Orthographic
 

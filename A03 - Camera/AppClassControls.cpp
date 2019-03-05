@@ -382,13 +382,29 @@ void Application::CameraRotation(float a_fSpeed)
 	}
 	*/
 
-	// calculating new rotations
-	quaternion rot1 = glm::angleAxis(glm::radians(fAngleX), m_pCamera->GetSides());
-	quaternion rot2 = glm::angleAxis(glm::radians(fAngleY), AXIS_Y);
+	if ((totRotX + fAngleX) > 80.0f) {
+		fAngleX = 0.0f;
+	}
+	else if ((totRotX + fAngleX) < -80.0f) {
+		fAngleX = 0.0f;
+	}
+	else {
+		totRotX += fAngleX;
+	}
 
-	// rotation vectors
-	vector3 rotView = m_pCamera->GetForward() * rot1 * rot2;
-	vector3 rotR = m_pCamera->GetSides() * rot2;
+	quaternion rot1;
+	quaternion rot2;
+
+	// calculating new rotations
+	rot1 = glm::angleAxis(glm::radians(fAngleX), m_pCamera->GetSides());
+	rot2 = glm::angleAxis(glm::radians(fAngleY), AXIS_Y);
+	
+
+	vector3 rotView = vector3(0.0f);
+	vector3 rotR = vector3(0.0f);
+	
+	rotView = m_pCamera->GetForward() * rot1 * rot2;
+	rotR = m_pCamera->GetSides() * rot2;
 
 	m_pCamera->SetForward(rotView);
 	m_pCamera->SetSides(rotR);
