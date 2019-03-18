@@ -15,12 +15,63 @@ vector3 MyRigidBody::GetHalfWidth(void) { return m_v3HalfWidth; }
 matrix4 MyRigidBody::GetModelMatrix(void) { return m_m4ToWorld; }
 void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix) 
 {
-	m_m4ToWorld = a_m4ModelMatrix;
+	
 
 	m_v3CenterG = static_cast<vector3>(m_m4ToWorld * vector4(m_v3Center, 1.0f));
 
 	m_v3MaxG = static_cast<vector3>(m_m4ToWorld * vector4(m_v3MaxL, 1.0f));
 	m_v3MinG = static_cast<vector3>(m_m4ToWorld * vector4(m_v3MinL, 1.0f));
+
+
+	if (a_m4ModelMatrix == m_m4ToWorld) {
+		return;
+	}
+
+	m_m4ToWorld = a_m4ModelMatrix;
+
+	vector3 v3Vertices[8];
+
+	v3Vertices[0] = m_v3MinL;
+	v3Vertices[1] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MinL.z);
+	v3Vertices[2] = vector3(m_v3MinL.x, m_v3MaxL.y, m_v3MinL.z);
+	v3Vertices[3] = vector3(m_v3MaxL.x, m_v3MaxL.y, m_v3MinL.z);
+
+	v3Vertices[4] = vector3(m_v3MinL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3Vertices[5] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3Vertices[6] = vector3(m_v3MinL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3Vertices[7] = m_v3MaxL;
+
+	for (uint i = 0; i < 8; i++) {
+		v3Vertices[i] = vector3(m_m4ToWorld * vector4(v3Vertices[i], 1.0f));
+	}
+
+	m_v3MaxG = m_v3MinG = v3Vertices[0];
+
+	for (uint i = 0; i < 8; i++) {
+		
+		if (m_v3MaxG.x < v3Vertices[i].x) {
+			m_v3MaxG.x = v3Vertices[i].x;
+		}
+		else if (m_v3MinG.x > v3Vertices[i].x) {
+			m_v3MinG.x = v3Vertices[i].x;
+		}
+
+		if (m_v3MaxG.y < v3Vertices[i].y) {
+			m_v3MaxG.y = v3Vertices[i].y;
+		}
+		else if (m_v3MinG.y > v3Vertices[i].y) {
+			m_v3MinG.y = v3Vertices[i].y;
+		}
+
+		if (m_v3MaxG.z < v3Vertices[i].z) {
+			m_v3MaxG.z = v3Vertices[i].z;
+		}
+		else if (m_v3MinG.z > v3Vertices[i].z) {
+			m_v3MinG.z = v3Vertices[i].z;
+		}
+	}
+
+	m_v3ARBBSize = m_v3MaxG - m_v3MinG;
 }
 //Allocation
 void MyRigidBody::Init(void)

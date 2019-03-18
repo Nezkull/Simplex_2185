@@ -85,8 +85,51 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	m_m4ToWorld = a_m4ModelMatrix;
 	
 	//your code goes here---------------------
-	m_v3MinG = m_v3MinL;
-	m_v3MaxG = m_v3MaxL;
+
+	vector3 v3Vertices[8]; // array of vectors that holds all 8 corners of the Axis Re-aligned Bounding Box
+
+	// calculating all 8 of the bounding box corners
+	v3Vertices[0] = m_v3MinL;
+	v3Vertices[1] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MinL.z);
+	v3Vertices[2] = vector3(m_v3MinL.x, m_v3MaxL.y, m_v3MinL.z);
+	v3Vertices[3] = vector3(m_v3MaxL.x, m_v3MaxL.y, m_v3MinL.z);
+	v3Vertices[4] = vector3(m_v3MinL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3Vertices[5] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3Vertices[6] = vector3(m_v3MinL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3Vertices[7] = m_v3MaxL;
+
+	// transferring the local points to global space
+	for (uint i = 0; i < 8; i++) {
+		v3Vertices[i] = vector3(m_m4ToWorld * vector4(v3Vertices[i], 1.0f));
+	}
+
+	// setting the global max/min to the first corner in the array
+	m_v3MaxG = m_v3MinG = v3Vertices[0];
+
+	// loop through the array and determine if there are smaller minG or larger maxG values in the array
+	for (uint i = 0; i < 8; i++) {
+
+		if (m_v3MaxG.x < v3Vertices[i].x) {
+			m_v3MaxG.x = v3Vertices[i].x;
+		}
+		else if (m_v3MinG.x > v3Vertices[i].x) {
+			m_v3MinG.x = v3Vertices[i].x;
+		}
+
+		if (m_v3MaxG.y < v3Vertices[i].y) {
+			m_v3MaxG.y = v3Vertices[i].y;
+		}
+		else if (m_v3MinG.y > v3Vertices[i].y) {
+			m_v3MinG.y = v3Vertices[i].y;
+		}
+
+		if (m_v3MaxG.z < v3Vertices[i].z) {
+			m_v3MaxG.z = v3Vertices[i].z;
+		}
+		else if (m_v3MinG.z > v3Vertices[i].z) {
+			m_v3MinG.z = v3Vertices[i].z;
+		}
+	}
 	//----------------------------------------
 
 	//we calculate the distance between min and max vectors
