@@ -32,9 +32,9 @@ void Application::Update(void)
 
 	//Add objects to the Manager
 	uint nCount = 0;
-	for (int j = -420; j < 420; j += 2)
+	for (int j = -m_uSquare; j < m_uSquare; j += 2)
 	{
-		for (int i = -420; i < 420; i += 2)
+		for (int i = -m_uSquare; i < m_uSquare; i += 2)
 		{
 			m_pMyMeshMngr->AddConeToRenderList(glm::translate(vector3(i, 0.0f, j)));
 			nCount++;
@@ -55,6 +55,16 @@ void Application::Display(void)
 
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
+
+	/*
+	for (int j = -m_uSquare; j < m_uSquare; j += 2)
+	{
+		for (int i = -m_uSquare; i < m_uSquare; i += 2)
+		{
+			m_pMyMeshMngr->AddConeToRenderList(glm::translate(vector3(i, 0.0f, j)));
+		}
+	}
+	*/
 
 	//clear the render list
 	m_pMeshMngr->ClearRenderList();

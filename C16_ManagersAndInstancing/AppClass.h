@@ -16,6 +16,8 @@ namespace Simplex
 
 class Application
 {
+	int m_uSquare = 100;
+
 	MyCamera* m_pCamera = nullptr;
 	MyMeshManager* m_pMyMeshMngr = nullptr;
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
