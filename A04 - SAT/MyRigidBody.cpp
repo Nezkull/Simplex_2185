@@ -337,7 +337,6 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 
 	// gets the central point between the two objects from their center points
 	glm::vec3 trans = bCent - aCent;
-
 	trans = glm::vec3(glm::dot(trans, a[0]), glm::dot(trans, a[1]), glm::dot(trans, a[2]));
 
 	// calculates he Absolute Rotational matrixes
@@ -347,7 +346,24 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 		}
 	}
 
-	// tests done here
+	// A x,y,z axes test
+	for (int i = 0; i < 3; i++) {
+		ra = aHalf[i];
+		rb = bHalf.x * AbsR[i][0] + bHalf.y * AbsR[i][1] + bHalf.z * AbsR[i][2];
+		if (glm::abs(trans[i]) > ra + rb) {
+			return 0;
+		}
+	}
+
+	// B x,y,z axes test
+	for (int i = 0; i < 3; i++) {
+		ra = aHalf.x * AbsR[0][i] + aHalf.y * AbsR[1][i] + aHalf.z * AbsR[2][i];
+		rb = bHalf[i];
+		if (glm::abs(trans[0] * R[0][i] + trans[1] * R[1][i] + trans[2] * R[2][i]) > ra + rb) {
+			return 0;
+		}
+	}
+
 	// Checks Ax against Bx
 	ra = aHalf.y * AbsR[2][0] + aHalf.z * AbsR[1][0];
 	rb = bHalf.y * AbsR[0][2] + bHalf.z * AbsR[0][1];
