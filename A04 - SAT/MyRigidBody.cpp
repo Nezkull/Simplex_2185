@@ -287,7 +287,129 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	(eSATResults::SAT_NONE has a value of 0)
 	*/
 
-	// EPSIOLON can be replaced with 0.00001 or something like that
+	// variables
+	glm::vec3 aCent;
+	glm::vec3 bCent;
+	glm::vec3 aHalf;
+	glm::vec3 bHalf;
+	glm::mat3 R;
+	glm::mat3 AbsR;
+	float ra;
+	float rb;
+	float eps = 0.00001f;
+	
+	/*
+	// Region R = { x | x = c+r*u[0]+s*u[1]+t*u[2] }, |r|<=e[0], |s|<=e[1], |t|<=e[2]
+	struct OBB {
+		Point c;      // OBB center point
+		Vector u[3];  // Local x-, y-, and z-axes
+		Vector e;     // Positive halfwidth extents of OBB along each axis
+	*/
+
+	// gets the x,y,z axes for the object
+	glm::vec3 a[3] = {
+		m_m4ToWorld[0],
+		m_m4ToWorld[1],
+		m_m4ToWorld[2]
+	};
+
+	// gets x,y,z axes for the object
+	glm::vec3 b[3] = {
+		a_pOther->m_m4ToWorld[0],
+		a_pOther->m_m4ToWorld[1],
+		a_pOther->m_m4ToWorld[2]
+	};
+
+	// gets the centerpoints for the objects
+	aCent = glm::vec3(GetCenterGlobal());
+	bCent = glm::vec3(a_pOther->GetCenterGlobal());
+
+	// gets the radii for the objects
+	aHalf = glm::vec3(GetHalfWidth());
+	bHalf = glm::vec3(a_pOther->GetHalfWidth());
+	
+	// calculates the Rotational matrixes
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			R[i][j] = glm::dot(a[i], b[j]);
+		}
+	}
+
+	// gets the central point between the two objects from their center points
+	glm::vec3 trans = bCent - aCent;
+
+	trans = glm::vec3(glm::dot(trans, a[0]), glm::dot(trans, a[1]), glm::dot(trans, a[2]));
+
+	// calculates he Absolute Rotational matrixes
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			AbsR[i][j] = glm::abs(R[i][j]) + eps;
+		}
+	}
+
+	// tests done here
+	// Checks Ax against Bx
+	ra = aHalf.y * AbsR[2][0] + aHalf.z * AbsR[1][0];
+	rb = bHalf.y * AbsR[0][2] + bHalf.z * AbsR[0][1];
+	if (glm::abs(trans[2] * R[1][0] - trans[1] * R[2][0]) > ra + rb) {
+		return eSATResults::SAT_AXxBX;
+	}
+
+	// Checks Ax against By
+	ra = aHalf.y * AbsR[2][1] + aHalf.z * AbsR[1][1];
+	rb = bHalf.x * AbsR[0][2] + bHalf.z * AbsR[0][0];
+	if (glm::abs(trans[2] * R[1][1] - trans[1] * R[2][1]) > ra + rb) {
+		return eSATResults::SAT_AXxBY;
+	}
+
+	// Checks Ax against Bz
+	ra = aHalf.y * AbsR[2][2] + aHalf.z * AbsR[1][2];
+	rb = bHalf.x * AbsR[0][1] + bHalf.y * AbsR[0][0];
+	if (glm::abs(trans[2] * R[1][2] - trans[1] * R[2][2]) > ra + rb) {
+		return eSATResults::SAT_AXxBZ;
+	}
+
+	// Checks Ay against Bx
+	ra = aHalf.x * AbsR[2][0] + aHalf.z * AbsR[0][0];
+	rb = bHalf.y * AbsR[1][2] + bHalf.z * AbsR[1][1];
+	if (glm::abs(trans[0] * R[2][0] - trans[2] * R[0][0]) > ra + rb) {
+		return eSATResults::SAT_AYxBX;
+	}
+
+	// Checks Ay against By
+	ra = aHalf.x * AbsR[2][1] + aHalf.z * AbsR[0][1];
+	rb = bHalf.x * AbsR[1][2] + bHalf.z * AbsR[1][0];
+	if (glm::abs(trans[0] * R[2][1] - trans[2] * R[0][1]) > ra + rb) {
+		return eSATResults::SAT_AYxBY;
+	}
+
+	// Checks Ay against Bz
+	ra = aHalf.x * AbsR[2][2] + aHalf.z * AbsR[0][2];
+	rb = bHalf.x * AbsR[1][1] + bHalf.y * AbsR[1][0];
+	if (glm::abs(trans[0] * R[2][2] - trans[2] * R[0][2]) > ra + rb) {
+		return eSATResults::SAT_AYxBZ;
+	}
+
+	// Checks Az against Bx
+	ra = aHalf.x * AbsR[1][0] + aHalf.y * AbsR[0][0];
+	rb = bHalf.y * AbsR[2][2] + bHalf.z * AbsR[2][1];
+	if (glm::abs(trans[1] * R[0][0] - trans[0] * R[1][0]) > ra + rb) {
+		return eSATResults::SAT_AZxBX;
+	}
+
+	// Checks Az against By
+	ra = aHalf.x * AbsR[1][1] + aHalf.y * AbsR[0][1];
+	rb = bHalf.x * AbsR[2][2] + bHalf.z * AbsR[2][0];
+	if (glm::abs(trans[1] * R[0][1] - trans[0] * R[1][1]) > ra + rb) {
+		return eSATResults::SAT_AZxBY;
+	}
+
+	// Checks Az against Bz
+	ra = aHalf.x * AbsR[1][2] + aHalf.y * AbsR[0][2];
+	rb = bHalf.x * AbsR[2][1] + bHalf.y * AbsR[2][0];
+	if (glm::abs(trans[1] * R[0][2] - trans[0] * R[1][2]) > ra + rb) {
+		return eSATResults::SAT_AZxBZ;
+	}
 
 	//there is no axis test that separates this two objects
 	return eSATResults::SAT_NONE;
