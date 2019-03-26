@@ -50,6 +50,10 @@ void Application::Update(void)
 
 	//Check collision
 	bool bColliding = m_pCreeper->IsColliding(m_pSteve);
+	m_pCreeper->IsColliding(m_pCow);
+	m_pCreeper->IsColliding(m_pPig);
+	m_pCreeper->IsColliding(m_pZombie);
+	m_pCreeper->IsColliding(m_pSteve);
 
 	//Add objects to render list
 	m_pCreeper->AddToRenderList(true);
