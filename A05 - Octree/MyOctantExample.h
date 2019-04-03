@@ -1,6 +1,6 @@
 /*----------------------------------------------
-Programmer: Alberto Bobadilla (labigm@gmail.com)
-Date: 2017/07
+Programmer: Nick Marano (ngm9939@rit.edu)
+Date: 04/03/2019
 ----------------------------------------------*/
 #ifndef __MYOCTANTCLASS_H_
 #define __MYOCTANTCLASS_H_

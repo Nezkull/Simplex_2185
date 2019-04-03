@@ -1,6 +1,6 @@
 /*----------------------------------------------
-Programmer: Alberto Bobadilla (labigm@gmail.com)
-Date: 2017/06
+Programmer: Nick Marano (ngm9939@rit.edu)
+Date: 04/03/2019
 ----------------------------------------------*/
 #ifndef __MYRIGIDBODY_H_
 #define __MYRIGIDBODY_H_
