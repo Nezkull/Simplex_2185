@@ -320,10 +320,24 @@ bool MyOctant::IsLeaf() {
 	return m_uChildren == 0;
 }
 
+// do stuff here to check for parent, then collision stuffs
 bool MyOctant::ContainsMoreThan(uint a_nEntities) {
 	uint nCount = 0;
 	uint nObjectCount = m_pEntityMngr->GetEntityCount();
 	
+	// get the current child and check its specific parent for collisions
+	for (int i = 0; i < 8; i++) {
+		// uint nParent = m_pChild[i]->GetParent();
+		
+		// this will do absolutely nothing ATM
+		if (m_pChild[i]->GetParent()->m_uChildren) {
+
+		}
+
+		// if the parent has children, and the subdivision counter is less then or equal to the max then parents, dont have any collision checks being performed on them, whereas the leaves will have to do collision checks 
+
+	}
+
 	for (uint i = 0; i < nObjectCount; i++) {
 		if (IsColliding(i)) {
 			nCount++;
@@ -397,6 +411,7 @@ void MyOctant::ConstructTree(uint a_nMaxLevel) {
 	ConstructList();
 }
 
+// maybe look at this to improve the FPS
 void MyOctant::AssignIDtoEntity() {
 	// Traverse until a leaf is reached
 	for (uint i = 0; i < m_uChildren; i++) {

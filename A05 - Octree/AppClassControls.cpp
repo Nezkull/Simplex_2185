@@ -111,16 +111,14 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 		bFPSControl = !bFPSControl;
 		m_pCameraMngr->SetFPS(bFPSControl);
 		break;
-	case sf::Keyboard::PageUp:	// PageUp & PageDown don't work like they should, need to either fix them or not really give a shit and let it do its own thing
+	case sf::Keyboard::PageUp:	// PageUp & PageDown don't work like they should, need to either fix them or not really give a shit and let it do its own thing, issue probably lies with the GetOctantCount function
 		++m_uOctantID;
-		
 		if (m_uOctantID >= m_pRoot->GetOctantCount())
 			m_uOctantID = - 1;
 		
 		break;
 	case sf::Keyboard::PageDown:
 		--m_uOctantID;
-		
 		if (m_uOctantID >= m_pRoot->GetOctantCount())
 			m_uOctantID = - 1;
 		
