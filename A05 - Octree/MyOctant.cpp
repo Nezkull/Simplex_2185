@@ -325,6 +325,7 @@ bool MyOctant::ContainsMoreThan(uint a_nEntities) {
 	uint nCount = 0;
 	uint nObjectCount = m_pEntityMngr->GetEntityCount();
 	
+	/*
 	// get the current child and check its specific parent for collisions
 	for (int i = 0; i < 8; i++) {
 		// uint nParent = m_pChild[i]->GetParent();
@@ -335,8 +336,11 @@ bool MyOctant::ContainsMoreThan(uint a_nEntities) {
 		}
 
 		// if the parent has children, and the subdivision counter is less then or equal to the max then parents, dont have any collision checks being performed on them, whereas the leaves will have to do collision checks 
-
+		// I'm not sure how to implement this but, I think that my issue is that the most recent branch is still running collisions against the cubes in its children.
+		// I wanted to check if the parent had any cubes still associated with it and if so remove those cubes from it. That way only the leaves are performing the collision checks.
 	}
+	*/
+
 
 	for (uint i = 0; i < nObjectCount; i++) {
 		if (IsColliding(i)) {
